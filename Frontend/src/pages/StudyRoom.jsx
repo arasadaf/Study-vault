@@ -9,7 +9,7 @@ import Notes from '../components/Notes';
 import Resources from '../components/Resources';
 import Doubts from '../components/Doubts';
 
-const BACKEND_URL = 'http://localhost:5000';
+const BACKEND_URL = 'https://study-vault-1.onrender.com';
 const SOCKET_URL = BACKEND_URL;
 
 export default function StudyRoom() {
