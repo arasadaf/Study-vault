@@ -46,12 +46,11 @@ const userSchema = new mongoose.Schema({
 });
 
 // Pre-save hook to calculate level based on XP
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function() {
   if (this.isModified('xp')) {
     // Level = floor(XP / 100) + 1
     this.level = Math.floor(this.xp / 100) + 1;
   }
-  next();
 });
 
 // Virtual for Tier Ranking
