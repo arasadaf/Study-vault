@@ -28,7 +28,7 @@ router.get('/', auth, async (req, res) => {
     res.json(rooms);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -74,7 +74,7 @@ router.get('/my-rooms', auth, async (req, res) => {
     res.json(result.slice(0, 12));
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -119,7 +119,7 @@ router.get('/check/:roomId', async (req, res) => {
     });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -145,7 +145,7 @@ router.post('/verify-password', async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 

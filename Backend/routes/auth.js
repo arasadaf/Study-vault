@@ -45,7 +45,7 @@ router.post('/register', async (req, res) => {
     res.status(201).json({ message: 'Registration successful. Please verify your email.' });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -98,7 +98,7 @@ router.post('/verify-otp', async (req, res) => {
     });
   } catch (err) {
     console.error('Verify OTP Error:', err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -144,7 +144,7 @@ router.post('/login', async (req, res) => {
     });
   } catch (err) {
     console.error('Login Error:', err.message);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -186,7 +186,7 @@ router.get('/leaderboard', async (req, res) => {
 
     res.json(usersWithTier);
   } catch (err) {
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -208,7 +208,7 @@ router.post('/resend-otp', async (req, res) => {
     res.json({ message: 'A new OTP has been sent to your email' });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -229,7 +229,7 @@ router.post('/forgot-password', async (req, res) => {
     res.json({ message: 'Password reset OTP sent to your email' });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
@@ -255,7 +255,7 @@ router.post('/reset-password', async (req, res) => {
     res.json({ message: 'Password reset successful' });
   } catch (err) {
     console.error(err);
-    res.status(500).send('Server Error');
+    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
   }
 });
 
