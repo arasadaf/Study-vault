@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
 
     if (!emailSent) {
       return res.status(201).json({ 
-        message: `Registration successful. (Dev Mode OTP: ${otp})`,
+        message: 'Registration successful. Please check your email for the OTP.',
         devOtp: otp 
       });
     }
@@ -213,7 +213,7 @@ router.post('/resend-otp', async (req, res) => {
 
     const emailSent = await sendVerificationOTP(user.email, otp);
     if (!emailSent) {
-      return res.json({ message: `A new OTP has been generated. (Dev Mode OTP: ${otp})`, devOtp: otp });
+      return res.json({ message: 'A new OTP has been sent to your email', devOtp: otp });
     }
     res.json({ message: 'A new OTP has been sent to your email' });
   } catch (err) {
@@ -237,7 +237,7 @@ router.post('/forgot-password', async (req, res) => {
 
     const emailSent = await sendPasswordResetOTP(email, otp);
     if (!emailSent) {
-      return res.json({ message: `Password reset OTP generated. (Dev Mode OTP: ${otp})`, devOtp: otp });
+      return res.json({ message: 'Password reset OTP sent to your email', devOtp: otp });
     }
     res.json({ message: 'Password reset OTP sent to your email' });
   } catch (err) {
