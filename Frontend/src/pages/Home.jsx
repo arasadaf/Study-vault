@@ -193,7 +193,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <div className="glass-panel p-8 rounded-2xl border border-indigo-500/10 flex flex-col justify-between">
+          <div className="glass-panel p-8 rounded-2xl border border-indigo-500/10 flex flex-col gap-6">
             <div>
               <div className="flex items-center gap-4 mb-6">
                 <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${getTierColor(userStats?.tier)} flex items-center justify-center text-2xl font-bold shadow-lg shadow-indigo-500/20 ring-2 ring-white/10`}>
