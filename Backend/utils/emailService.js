@@ -1,10 +1,9 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
   host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -12,9 +11,9 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false
   },
-  connectionTimeout: 10000, // 10 seconds timeout
-  greetingTimeout: 10000,
-  socketTimeout: 10000
+  connectionTimeout: 15000,
+  greetingTimeout: 15000,
+  socketTimeout: 15000
 });
 
 const sendEmail = async (to, subject, text, html) => {
@@ -27,11 +26,13 @@ const sendEmail = async (to, subject, text, html) => {
   };
 
   try {
+    console.log(`Attempting to send email to ${to} via smtp.gmail.com:465...`);
     const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent: ' + info.response);
+    console.log('✅ Email sent successfully: ' + info.response);
     return info;
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error('🚨 [Nodemailer SMTP Error]:', error.message);
+    console.error('🚨 [Nodemailer Full Details]:', error);
     // In development, we log the OTP to the console if email fails
     if (text.includes('OTP')) {
       console.log('--- DEVELOPMENT OTP LOG ---');
