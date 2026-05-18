@@ -71,6 +71,10 @@ export default function Home() {
 
   const handleJoin = (e) => {
     e.preventDefault();
+    if (!isLoggedIn) {
+      openLogin();
+      return;
+    }
     if (roomId.trim()) {
       navigate(`/room/${roomId}`);
     }

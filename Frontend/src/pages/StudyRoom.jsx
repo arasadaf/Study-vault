@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
+import { useAuth } from '../context/AuthContext';
 
 // We'll separate these into their own components next
 import Chat from '../components/Chat';
@@ -14,6 +15,8 @@ const SOCKET_URL = BACKEND_URL;
 
 export default function StudyRoom() {
   const { roomId } = useParams();
+  const navigate = useNavigate();
+  const { user: authUser, openLogin } = useAuth();
   const [socket, setSocket] = useState(null);
   const [activeTab, setActiveTab] = useState('whiteboard'); // 'whiteboard' or 'notes'
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -33,6 +36,13 @@ export default function StudyRoom() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('vault_token');
+    if (!token || !authUser) {
+      openLogin();
+      navigate('/');
+      return;
+    }
+
     // 1. Check if room exists and if it has a password
     const checkRoomStatus = async () => {
       try {
