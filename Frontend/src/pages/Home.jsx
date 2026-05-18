@@ -245,6 +245,7 @@ export default function Home() {
                   </svg>
                 </button>
               </div>
+            </form>
           </div>
         )}
         
