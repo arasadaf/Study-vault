@@ -29,6 +29,7 @@ function AppContent() {
             <div className="hidden md:flex gap-6 items-center">
               {user ? (
                 <>
+                  <Link to="/" className="text-slate-300 hover:text-white font-medium transition-colors">Home</Link>
                   <Link to="/my-rooms" className="text-slate-300 hover:text-white font-medium transition-colors">My Rooms</Link>
                   <div className="h-4 w-px bg-slate-800"></div>
                   <span className="text-slate-300">Hello, <span className="font-semibold text-white">{user.username}</span></span>
@@ -36,6 +37,7 @@ function AppContent() {
                 </>
               ) : (
                 <>
+                  <Link to="/" className="text-slate-300 hover:text-white font-medium transition-colors">Home</Link>
                   <button onClick={openLogin} className="btn-secondary py-1.5 px-6">Login</button>
                   <button onClick={openSignup} className="btn-primary py-1.5 px-6">Sign Up</button>
                 </>
@@ -72,11 +74,18 @@ function AppContent() {
                     </div>
                   </div>
                   <Link 
+                    to="/" 
+                    className="block py-2 text-slate-300 hover:text-white transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Home
+                  </Link>
+                  <Link 
                     to="/my-rooms" 
                     className="block py-2 text-slate-300 hover:text-white transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    My Recent Rooms
+                    My Rooms
                   </Link>
                   <button 
                     onClick={logout} 
@@ -87,6 +96,13 @@ function AppContent() {
                 </>
               ) : (
                 <div className="flex flex-col gap-3">
+                  <Link 
+                    to="/" 
+                    className="block py-2 text-slate-300 hover:text-white transition-colors text-center font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Home
+                  </Link>
                   <button onClick={openLogin} className="w-full btn-secondary py-2 text-center">Login</button>
                   <button onClick={openSignup} className="w-full btn-primary py-2 text-center">Sign Up</button>
                 </div>
