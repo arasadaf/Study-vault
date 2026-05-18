@@ -51,6 +51,9 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
         
+        if (data.devOtp) {
+          console.log('🔑 [Vault Demo Mode] OTP:', data.devOtp);
+        }
         setMessage(data.message);
         setMode('verify');
       } 
@@ -85,6 +88,9 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
+        if (data.devOtp) {
+          console.log('🔑 [Vault Demo Mode] Reset OTP:', data.devOtp);
+        }
         setMessage(data.message);
         setMode('reset');
       }
@@ -117,6 +123,9 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
+      if (data.devOtp) {
+        console.log('🔑 [Vault Demo Mode] Resent OTP:', data.devOtp);
+      }
       setMessage(data.message);
     } catch (err) {
       setError(err.message);
