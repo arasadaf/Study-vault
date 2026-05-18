@@ -2,7 +2,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
-const BACKEND_URL = 'https://study-vault-1.onrender.com';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 
 export default function Home() {
   const navigate = useNavigate();
