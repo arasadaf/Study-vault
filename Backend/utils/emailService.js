@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || '465', 10),
+  secure: (process.env.SMTP_PORT || '465') === '465',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async (to, subject, text, html) => {
   const mailOptions = {
-    from: `"Vault Support" <${process.env.EMAIL_USER}>`,
+    from: process.env.EMAIL_FROM || `"Vault Support" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     text,
@@ -26,7 +26,7 @@ const sendEmail = async (to, subject, text, html) => {
   };
 
   try {
-    console.log(`Attempting to send email to ${to} via smtp.gmail.com:465...`);
+    console.log(`Attempting to send email to ${to} via ${process.env.SMTP_HOST || 'smtp.gmail.com'}:${process.env.SMTP_PORT || '465'}...`);
     const info = await transporter.sendMail(mailOptions);
     console.log('✅ Email sent successfully: ' + info.response);
     return info;
