@@ -145,7 +145,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         {error && <div className="mb-4 p-3 bg-red-500/10 border border-red-500/50 rounded-lg text-red-400 text-sm">{error}</div>}
         {message && <div className="mb-4 p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 text-sm">{message}</div>}
 
-        <form onSubmit={handleAuth} className="space-y-4">
+        <form onSubmit={handleAuth} className="space-y-4" autoComplete="off">
           {(mode === 'login' || mode === 'signup' || mode === 'verify') && (
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Username</label>
@@ -155,6 +155,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 onChange={(e) => setUsername(e.target.value)} 
                 className="input-field" 
                 placeholder="Enter your username"
+                autoComplete="off"
                 required 
               />
             </div>
@@ -169,6 +170,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 onChange={(e) => setEmail(e.target.value)} 
                 className="input-field" 
                 placeholder="name@example.com"
+                autoComplete="off"
                 required 
               />
             </div>
@@ -183,6 +185,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 onChange={(e) => setEmail(e.target.value)} 
                 className="input-field" 
                 placeholder="name@example.com"
+                autoComplete="off"
                 required 
               />
             </div>
@@ -197,6 +200,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
                 onChange={(e) => setPassword(e.target.value)} 
                 className="input-field" 
                 placeholder="••••••••"
+                autoComplete="new-password"
                 required 
                 minLength={6} 
               />
