@@ -18,7 +18,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async (to, subject, text, html) => {
   const mailOptions = {
-    from: process.env.EMAIL_FROM || `"Vault Support" <${process.env.EMAIL_USER}>`,
+    from: process.env.EMAIL_FROM ? `"Study Vault" <${process.env.EMAIL_FROM}>` : `"Study Vault" <${process.env.EMAIL_USER}>`,
     to,
     subject,
     text,
