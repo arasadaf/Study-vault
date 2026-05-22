@@ -58,7 +58,7 @@ router.post('/register', async (req, res) => {
 router.post('/verify-otp', async (req, res) => {
   try {
     const { username, otp } = req.body;
-    console.log(`Verifying OTP for ${username}: provided ${otp}`);
+
     
     const user = await User.findOne({ username });
 
@@ -69,15 +69,15 @@ router.post('/verify-otp', async (req, res) => {
     
     if (user.isVerified) return res.status(400).json({ message: 'Account already verified' });
     
-    console.log(`Stored OTP: ${user.otp}, Expires: ${user.otpExpires}`);
+
 
     if (user.otp !== otp) {
-      console.log('OTP mismatch');
+
       return res.status(400).json({ message: 'Invalid OTP' });
     }
     
     if (user.otpExpires < Date.now()) {
-      console.log('OTP expired');
+
       return res.status(400).json({ message: 'Expired OTP' });
     }
 
@@ -211,7 +211,8 @@ router.post('/resend-otp', async (req, res) => {
 
     const emailSent = await sendVerificationOTP(user.email, otp);
     if (!emailSent) {
-      return res.json({ message: 'A new OTP has been sent to your email', devOtp: otp });
+      console.error('Failed to send OTP email to', user.email);
+      return res.status(500).json({ message: 'Failed to send OTP email. Please try again later.' });
     }
     res.json({ message: 'A new OTP has been sent to your email' });
   } catch (err) {
@@ -235,7 +236,8 @@ router.post('/forgot-password', async (req, res) => {
 
     const emailSent = await sendPasswordResetOTP(email, otp);
     if (!emailSent) {
-      return res.json({ message: 'Password reset OTP sent to your email', devOtp: otp });
+      console.error('Failed to send password reset email to', email);
+      return res.status(500).json({ message: 'Failed to send password reset email. Please try again later.' });
     }
     res.json({ message: 'Password reset OTP sent to your email' });
   } catch (err) {
