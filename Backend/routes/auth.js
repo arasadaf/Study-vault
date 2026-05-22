@@ -43,10 +43,8 @@ router.post('/register', async (req, res) => {
     const emailSent = await sendVerificationOTP(email, otp);
 
     if (!emailSent) {
-      return res.status(201).json({ 
-        message: 'Registration successful. Please check your email for the OTP.',
-        devOtp: otp 
-      });
+      console.error('Failed to send verification email for', email);
+      return res.status(500).json({ message: 'Registration successful but failed to send OTP email. Please try again later.' });
     }
 
     res.status(201).json({ message: 'Registration successful. Please check your email for the OTP.' });

@@ -33,14 +33,8 @@ const sendEmail = async (to, subject, text, html) => {
   } catch (error) {
     console.error('🚨 [Nodemailer SMTP Error]:', error.message);
     console.error('🚨 [Nodemailer Full Details]:', error);
-    // In development, we log the OTP to the console if email fails
-    if (text.includes('OTP')) {
-      console.log('--- DEVELOPMENT OTP LOG ---');
-      console.log(`To: ${to}`);
-      console.log(`Subject: ${subject}`);
-      console.log(`Message: ${text}`);
-      console.log('---------------------------');
-    }
+    // Development OTP logging removed for production security
+
     return null;
   }
 };

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { useAuth } from '../context/AuthContext';
+import { BACKEND_URL } from '../utils/apiConfig';
 
 // We'll separate these into their own components next
 import Chat from '../components/Chat';
@@ -10,7 +11,6 @@ import Notes from '../components/Notes';
 import Resources from '../components/Resources';
 import Doubts from '../components/Doubts';
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
 const SOCKET_URL = BACKEND_URL;
 
 export default function StudyRoom() {

@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000';
+import { BACKEND_URL } from '../utils/apiConfig';
 
 export default function MyRooms() {
   const { user: authUser, openLogin } = useAuth();
   const [myRooms, setMyRooms] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showJoinModal, setShowJoinModal] = useState(false);
+  const [joinRoomId, setJoinRoomId] = useState('');
   const navigate = useNavigate();
+
+  const handleJoinSubmit = (e) => {
+    e.preventDefault();
+    if (joinRoomId.trim()) {
+      navigate(`/room/${joinRoomId}`);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem('vault_token');
@@ -54,12 +62,20 @@ export default function MyRooms() {
           </h2>
           <p className="text-slate-400 mt-1">Continue where you left off in your study sessions.</p>
         </div>
-        <Link to="/" className="btn-primary flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
-          </svg>
-          New Room
-        </Link>
+        <div className="flex items-center gap-3">
+          <button onClick={() => setShowJoinModal(true)} className="btn-secondary flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+            </svg>
+            Join Room
+          </button>
+          <Link to="/" state={{ openCreateModal: true }} className="btn-primary flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clipRule="evenodd" />
+            </svg>
+            New Room
+          </Link>
+        </div>
       </div>
 
       {isLoading ? (
@@ -138,6 +154,44 @@ export default function MyRooms() {
               </div>
             </Link>
           ))}
+        </div>
+      )}
+
+      {/* Join Room Modal */}
+      {showJoinModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
+          <div className="glass-panel max-w-md w-full p-8 rounded-2xl shadow-2xl border border-indigo-500/20">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-2xl font-bold">Join a Room</h3>
+              <button onClick={() => setShowJoinModal(false)} className="text-slate-400 hover:text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <form onSubmit={handleJoinSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">Room ID</label>
+                <input 
+                  type="text" 
+                  required
+                  autoComplete="off"
+                  className="input-field"
+                  placeholder="e.g. math-101"
+                  value={joinRoomId}
+                  onChange={(e) => setJoinRoomId(e.target.value)}
+                />
+              </div>
+              
+              <button type="submit" className="w-full btn-primary py-3 mt-4 flex justify-center items-center gap-2">
+                Join Room
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>

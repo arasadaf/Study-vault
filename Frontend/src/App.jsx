@@ -1,17 +1,20 @@
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import Home from './pages/Home';
 import StudyRoom from './pages/StudyRoom';
 import MyRooms from './pages/MyRooms';
+import Profile from './pages/Profile';
 import AuthModal from './components/AuthModal';
+import Footer from './components/Footer';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 function AppContent() {
   const { user, isAuthModalOpen, authMode, openLogin, openSignup, logout, closeAuth } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const isStudyRoom = location.pathname.startsWith('/room/');
 
   return (
-    <Router>
       <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
         {/* Navigation Bar */}
         <nav className="glass-panel sticky top-0 z-50 py-4 px-4 md:px-8 border-b border-white/5">
@@ -32,7 +35,9 @@ function AppContent() {
                   <NavLink to="/" className={({ isActive }) => isActive ? "text-indigo-400 font-bold drop-shadow-[0_0_12px_rgba(99,102,241,0.5)] transition-all" : "text-slate-300 hover:text-white font-medium transition-colors"}>Home</NavLink>
                   <NavLink to="/my-rooms" className={({ isActive }) => isActive ? "text-indigo-400 font-bold drop-shadow-[0_0_12px_rgba(99,102,241,0.5)] transition-all" : "text-slate-300 hover:text-white font-medium transition-colors"}>My Rooms</NavLink>
                   <div className="h-4 w-px bg-slate-800"></div>
-                  <span className="text-slate-300">Hello, <span className="font-semibold text-white">{user.username}</span></span>
+                  <Link to="/profile" className="text-slate-300 hover:text-white transition-colors group">
+                    Hello, <span className="font-semibold text-white group-hover:text-indigo-400 transition-colors">{user.username}</span>
+                  </Link>
                   <button onClick={logout} className="btn-secondary py-1.5 px-4 text-sm">Logout</button>
                 </>
               ) : (
@@ -69,7 +74,9 @@ function AppContent() {
                       {user.username[0].toUpperCase()}
                     </div>
                     <div>
-                      <p className="font-bold text-white">{user.username}</p>
+                      <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
+                        <p className="font-bold text-white hover:text-indigo-400 transition-colors">{user.username}</p>
+                      </Link>
                       <p className="text-xs text-slate-400">Collaborator</p>
                     </div>
                   </div>
@@ -127,18 +134,22 @@ function AppContent() {
             <Route path="/" element={<Home />} />
             <Route path="/room/:roomId" element={<StudyRoom />} />
             <Route path="/my-rooms" element={<MyRooms />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>
+        
+        {!isStudyRoom && <Footer />}
       </div>
-    </Router>
   );
 }
 
 function App() {
   return (
-    <AuthProvider>
-      <AppContent />
-    </AuthProvider>
+    <Router>
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
+    </Router>
   );
 }
 
