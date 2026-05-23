@@ -1,19 +1,13 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: parseInt(process.env.SMTP_PORT || '465', 10),
-  secure: (process.env.SMTP_PORT || '465') === '465',
+  host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+  port: parseInt(process.env.SMTP_PORT || '587', 10),
+  secure: parseInt(process.env.SMTP_PORT || '587', 10) === 465,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
-  },
-  connectionTimeout: 15000,
-  greetingTimeout: 15000,
-  socketTimeout: 15000
+  }
 });
 
 const sendEmail = async (to, subject, text, html) => {
@@ -33,7 +27,14 @@ const sendEmail = async (to, subject, text, html) => {
   } catch (error) {
     console.error('🚨 [Nodemailer SMTP Error]:', error.message);
     console.error('🚨 [Nodemailer Full Details]:', error);
-    // Development OTP logging removed for production security
+    // Only log OTP contents in non-production environments
+    if (process.env.NODE_ENV !== 'production' && text && text.includes('OTP')) {
+      console.log('--- DEVELOPMENT OTP LOG ---');
+      console.log(`To: ${to}`);
+      console.log(`Subject: ${subject}`);
+      console.log(`Message: ${text}`);
+      console.log('---------------------------');
+    }
 
     return null;
   }
@@ -77,3 +78,18 @@ module.exports = {
   sendVerificationOTP,
   sendPasswordResetOTP
 };
+
+// Verify transporter connectivity (useful at startup to ensure SMTP is configured)
+const verifyTransporter = async () => {
+  try {
+    await transporter.verify();
+    const maskedUser = process.env.EMAIL_USER ? process.env.EMAIL_USER.replace(/(^.).+(@.*$)/, '$1***$2') : 'unknown';
+    console.log(`✅ SMTP transporter verified (host=${process.env.SMTP_HOST || 'smtp.gmail.com'}, user=${maskedUser})`);
+    return true;
+  } catch (err) {
+    console.error('❌ SMTP verification failed:', err && err.message ? err.message : err);
+    return false;
+  }
+};
+
+module.exports.verifyTransporter = verifyTransporter;
