@@ -11,6 +11,56 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmail = async (to, subject, text, html) => {
+  // If we have a Brevo API key (starts with 'xkeysib-'), use Brevo HTTP REST API
+  const brevoApiKey = process.env.BREVO_API_KEY || (process.env.EMAIL_PASS && process.env.EMAIL_PASS.startsWith('xkeysib-') ? process.env.EMAIL_PASS : null);
+  
+  if (brevoApiKey) {
+    console.log(`Attempting to send email to ${to} via Brevo HTTP REST API...`);
+    try {
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'api-key': brevoApiKey
+        },
+        body: JSON.stringify({
+          sender: { 
+            name: 'Study Vault', 
+            email: process.env.EMAIL_FROM || process.env.EMAIL_USER || 'aba3fe001@smtp-brevo.com' 
+          },
+          to: [{ email: to }],
+          subject,
+          htmlContent: html,
+          textContent: text
+        })
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        console.log('✅ Email sent successfully via Brevo HTTP API:', result);
+        return result;
+      } else {
+        console.error('🚨 Brevo HTTP API Error:', result);
+        // Fall back to printing to console in development
+        if (text && text.includes('OTP')) {
+          console.log('\n⚠️  [BREVO HTTP API FAILURE] Falling back to console logging:');
+          console.log('--- DEVELOPMENT OTP LOG ---');
+          console.log(`To: ${to}`);
+          console.log(`Subject: ${subject}`);
+          console.log(`Message: ${text}`);
+          console.log('---------------------------\n');
+        }
+        return null;
+      }
+    } catch (error) {
+      console.error('🚨 [Brevo HTTP Network Error]:', error.message);
+      return null;
+    }
+  }
+
+  // Otherwise, use Nodemailer SMTP (perfect for local development / paid tiers)
   const mailOptions = {
     from: process.env.EMAIL_FROM ? `"Study Vault" <${process.env.EMAIL_FROM}>` : `"Study Vault" <${process.env.EMAIL_USER}>`,
     to,
@@ -83,6 +133,12 @@ module.exports = {
 
 // Verify transporter connectivity (useful at startup to ensure SMTP is configured)
 const verifyTransporter = async () => {
+  const brevoApiKey = process.env.BREVO_API_KEY || (process.env.EMAIL_PASS && process.env.EMAIL_PASS.startsWith('xkeysib-') ? process.env.EMAIL_PASS : null);
+  if (brevoApiKey) {
+    console.log('✅ Using Brevo HTTP REST API (transporter verification bypassed)');
+    return true;
+  }
+  
   try {
     await transporter.verify();
     const maskedUser = process.env.EMAIL_USER ? process.env.EMAIL_USER.replace(/(^.).+(@.*$)/, '$1***$2') : 'unknown';
