@@ -44,10 +44,17 @@ router.post('/register', async (req, res) => {
 
     if (!emailSent) {
       console.error('Failed to send verification email for', email);
-      return res.status(500).json({ message: 'Registration successful but failed to send OTP email. Please try again later.' });
+      return res.status(201).json({ 
+        message: 'Registration successful, but the verification email could not be sent. You can retrieve your OTP from the developer/server console.', 
+        devOtp: otp 
+      });
     }
 
-    res.status(201).json({ message: 'Registration successful. Please check your email for the OTP.' });
+    const responsePayload = { message: 'Registration successful. Please check your email for the OTP.' };
+    if (process.env.NODE_ENV !== 'production') {
+      responsePayload.devOtp = otp;
+    }
+    res.status(201).json(responsePayload);
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
@@ -212,9 +219,17 @@ router.post('/resend-otp', async (req, res) => {
     const emailSent = await sendVerificationOTP(user.email, otp);
     if (!emailSent) {
       console.error('Failed to send OTP email to', user.email);
-      return res.status(500).json({ message: 'Failed to send OTP email. Please try again later.' });
+      return res.json({ 
+        message: 'A new OTP was generated but email delivery failed. You can retrieve it from the developer/server console.', 
+        devOtp: otp 
+      });
     }
-    res.json({ message: 'A new OTP has been sent to your email' });
+    
+    const responsePayload = { message: 'A new OTP has been sent to your email' };
+    if (process.env.NODE_ENV !== 'production') {
+      responsePayload.devOtp = otp;
+    }
+    res.json(responsePayload);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
@@ -237,9 +252,17 @@ router.post('/forgot-password', async (req, res) => {
     const emailSent = await sendPasswordResetOTP(email, otp);
     if (!emailSent) {
       console.error('Failed to send password reset email to', email);
-      return res.status(500).json({ message: 'Failed to send password reset email. Please try again later.' });
+      return res.json({ 
+        message: 'Password reset OTP generated but email delivery failed. You can retrieve it from the developer/server console.', 
+        devOtp: otp 
+      });
     }
-    res.json({ message: 'Password reset OTP sent to your email' });
+
+    const responsePayload = { message: 'Password reset OTP sent to your email' };
+    if (process.env.NODE_ENV !== 'production') {
+      responsePayload.devOtp = otp;
+    }
+    res.json(responsePayload);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });

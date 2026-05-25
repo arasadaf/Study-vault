@@ -27,13 +27,15 @@ const sendEmail = async (to, subject, text, html) => {
   } catch (error) {
     console.error('🚨 [Nodemailer SMTP Error]:', error.message);
     console.error('🚨 [Nodemailer Full Details]:', error);
-    // Only log OTP contents in non-production environments
-    if (process.env.NODE_ENV !== 'production' && text && text.includes('OTP')) {
+    
+    // Log OTP details to server console so registration/verification is not blocked during development/SMTP failure
+    if (text && text.includes('OTP')) {
+      console.log('\n⚠️  [SMTP FAILURE FALLBACK] Email delivery failed, but OTP is printed below for verification:');
       console.log('--- DEVELOPMENT OTP LOG ---');
       console.log(`To: ${to}`);
       console.log(`Subject: ${subject}`);
       console.log(`Message: ${text}`);
-      console.log('---------------------------');
+      console.log('---------------------------\n');
     }
 
     return null;
