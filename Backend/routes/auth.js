@@ -26,35 +26,31 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const otp = generateOTP();
-    const otpExpires = Date.now() + 24 * 60 * 60 * 1000; // 24 hours for development
-
     user = new User({ 
       username, 
       email, 
       password: hashedPassword,
-      otp,
-      otpExpires
+      isVerified: true
     });
     
     await user.save();
 
-    // Send OTP
-    const emailSent = await sendVerificationOTP(email, otp);
+    // Create token for immediate login
+    const payload = { user: { id: user.id, username: user.username } };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
 
-    if (!emailSent) {
-      console.error('Failed to send verification email for', email);
-      return res.status(201).json({ 
-        message: 'Registration successful, but the verification email could not be sent. You can retrieve your OTP from the developer/server console.', 
-        devOtp: otp 
-      });
-    }
-
-    const responsePayload = { message: 'Registration successful. Please check your email for the OTP.' };
-    if (process.env.NODE_ENV !== 'production') {
-      responsePayload.devOtp = otp;
-    }
-    res.status(201).json(responsePayload);
+    res.status(201).json({ 
+      message: 'Registration successful',
+      token,
+      user: {
+        id: user.id, 
+        username: user.username,
+        xp: user.xp,
+        level: user.level,
+        tier: user.tier,
+        badges: user.badges
+      }
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
@@ -125,11 +121,6 @@ router.post('/login', async (req, res) => {
     if (!user) {
       console.log('User not found');
       return res.status(400).json({ message: 'Invalid Credentials' });
-    }
-
-    if (!user.isVerified) {
-      console.log('User not verified');
-      return res.status(401).json({ message: 'Please verify your email first', unverified: true });
     }
 
     // Match password

@@ -50,20 +50,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
         
-        if (data.devOtp) {
-          console.log('🔑 [Vault Demo Mode] OTP:', data.devOtp);
-        }
-        setMessage(data.message);
-        setMode('verify');
-      } 
-      else if (mode === 'verify') {
-        const res = await fetch(`${BACKEND_URL}/api/auth/verify-otp`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, otp: otp.trim() }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message);
         login(data.user, data.token);
       }
       else if (mode === 'login') {
@@ -74,7 +60,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         });
         const data = await res.json();
         if (!res.ok) {
-          if (data.unverified) setMode('verify');
           throw new Error(data.message);
         }
         login(data.user, data.token);
@@ -111,27 +96,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
     }
   };
 
-  const handleResendOTP = async () => {
-    resetState();
-    setLoading(true);
-    try {
-      const res = await fetch(`${BACKEND_URL}/api/auth/resend-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim() }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-      if (data.devOtp) {
-        console.log('🔑 [Vault Demo Mode] Resent OTP:', data.devOtp);
-      }
-      setMessage(data.message);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
@@ -145,7 +109,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         <h2 className="text-2xl font-bold mb-6 text-center">
           {mode === 'login' && 'Welcome Back'}
           {mode === 'signup' && 'Join the Vault'}
-          {mode === 'verify' && 'Verify Your Email'}
           {mode === 'forgot' && 'Forgot Password'}
           {mode === 'reset' && 'Reset Password'}
         </h2>
@@ -154,7 +117,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         {message && <div className="mb-4 p-3 bg-green-500/10 border border-green-500/50 rounded-lg text-green-400 text-sm">{message}</div>}
 
         <form onSubmit={handleAuth} className="space-y-4" autoComplete="off">
-          {(mode === 'login' || mode === 'signup' || mode === 'verify') && (
+          {(mode === 'login' || mode === 'signup') && (
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Username</label>
               <input 
@@ -215,27 +178,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
             </div>
           )}
 
-          {mode === 'verify' && (
-            <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">6-Digit OTP</label>
-              <input 
-                type="text" 
-                value={otp} 
-                onChange={(e) => setOtp(e.target.value)} 
-                className="input-field text-center text-xl tracking-[10px]" 
-                placeholder="000000"
-                maxLength={6} 
-                required 
-              />
-              <button 
-                type="button"
-                onClick={handleResendOTP}
-                className="mt-2 text-xs text-indigo-400 hover:text-indigo-300 block ml-auto"
-              >
-                Resend OTP?
-              </button>
-            </div>
-          )}
 
           {mode === 'reset' && (
             <>
@@ -270,7 +212,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
             {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : (
               mode === 'login' ? 'Login' : 
               mode === 'signup' ? 'Sign Up' : 
-              mode === 'verify' ? 'Verify Account' :
               mode === 'forgot' ? 'Send Reset OTP' : 'Reset Password'
             )}
           </button>
