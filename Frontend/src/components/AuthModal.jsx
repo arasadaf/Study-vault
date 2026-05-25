@@ -64,25 +64,11 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         }
         login(data.user, data.token);
       }
-      else if (mode === 'forgot') {
-        const res = await fetch(`${BACKEND_URL}/api/auth/forgot-password`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message);
-        if (data.devOtp) {
-          console.log('🔑 [Vault Demo Mode] Reset OTP:', data.devOtp);
-        }
-        setMessage(data.message);
-        setMode('reset');
-      }
       else if (mode === 'reset') {
         const res = await fetch(`${BACKEND_URL}/api/auth/reset-password`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: email.trim(), otp: otp.trim(), newPassword }),
+          body: JSON.stringify({ email: email.trim(), newPassword }),
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
@@ -109,7 +95,6 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         <h2 className="text-2xl font-bold mb-6 text-center">
           {mode === 'login' && 'Welcome Back'}
           {mode === 'signup' && 'Join the Vault'}
-          {mode === 'forgot' && 'Forgot Password'}
           {mode === 'reset' && 'Reset Password'}
         </h2>
 
@@ -147,7 +132,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
             </div>
           )}
 
-          {(mode === 'forgot' || mode === 'reset') && (
+          {mode === 'reset' && (
             <div>
               <label className="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
               <input 
@@ -180,46 +165,31 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
 
           {mode === 'reset' && (
-            <>
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">6-Digit OTP</label>
-                <input 
-                  type="text" 
-                  value={otp} 
-                  onChange={(e) => setOtp(e.target.value)} 
-                  className="input-field text-center text-xl tracking-[10px]" 
-                  placeholder="000000"
-                  maxLength={6} 
-                  required 
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">New Password</label>
-                <input 
-                  type="password" 
-                  value={newPassword} 
-                  onChange={(e) => setNewPassword(e.target.value)} 
-                  className="input-field" 
-                  placeholder="••••••••"
-                  required 
-                  minLength={6} 
-                />
-              </div>
-            </>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-1">New Password</label>
+              <input 
+                type="password" 
+                value={newPassword} 
+                onChange={(e) => setNewPassword(e.target.value)} 
+                className="input-field" 
+                placeholder="••••••••"
+                required 
+                minLength={6} 
+              />
+            </div>
           )}
 
           <button type="submit" disabled={loading} className="w-full btn-primary py-3 mt-4 flex justify-center items-center gap-2">
             {loading ? <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div> : (
               mode === 'login' ? 'Login' : 
-              mode === 'signup' ? 'Sign Up' : 
-              mode === 'forgot' ? 'Send Reset OTP' : 'Reset Password'
+              mode === 'signup' ? 'Sign Up' : 'Reset Password'
             )}
           </button>
         </form>
 
         <div className="mt-6 text-center space-y-2">
           {mode === 'login' && (
-            <button onClick={() => { setMode('forgot'); resetState(); }} className="text-xs text-slate-500 hover:text-indigo-400 block mx-auto">
+            <button onClick={() => { setMode('reset'); resetState(); }} className="text-xs text-slate-500 hover:text-indigo-400 block mx-auto">
               Forgot password?
             </button>
           )}

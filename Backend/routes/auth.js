@@ -227,51 +227,14 @@ router.post('/resend-otp', async (req, res) => {
   }
 });
 
-// Forgot Password
-router.post('/forgot-password', async (req, res) => {
-  try {
-    const { email } = req.body;
-    const user = await User.findOne({ email });
-
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    const otp = generateOTP();
-    user.resetPasswordOTP = otp;
-    user.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
-    await user.save();
-
-    const emailSent = await sendPasswordResetOTP(email, otp);
-    if (!emailSent) {
-      console.error('Failed to send password reset email to', email);
-      return res.json({ 
-        message: 'Password reset OTP generated but email delivery failed. You can retrieve it from the developer/server console.', 
-        devOtp: otp 
-      });
-    }
-
-    const responsePayload = { message: 'Password reset OTP sent to your email' };
-    if (process.env.NODE_ENV !== 'production') {
-      responsePayload.devOtp = otp;
-    }
-    res.json(responsePayload);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server Error', details: err.message || err.toString() });
-  }
-});
-
-// Reset Password
+// Reset Password (No OTP)
 router.post('/reset-password', async (req, res) => {
   try {
-    const { email, otp, newPassword } = req.body;
+    const { email, newPassword } = req.body;
     const user = await User.findOne({ email });
 
     if (!user) return res.status(404).json({ message: 'User not found' });
     
-    if (user.resetPasswordOTP !== otp || user.resetPasswordExpires < Date.now()) {
-      return res.status(400).json({ message: 'Invalid or expired OTP' });
-    }
-
     // Hash new password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(newPassword, salt);
