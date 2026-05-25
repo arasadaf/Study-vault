@@ -2,7 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { OAuth2Client } = require('google-auth-library');
 
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
 const router = express.Router();
@@ -58,6 +60,66 @@ router.post('/register', async (req, res) => {
   }
 });
 
+
+// Google Login / Registration
+router.post('/google', async (req, res) => {
+  try {
+    const { credential } = req.body;
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const { sub: googleId, email, name: username } = payload;
+
+    // Check if user exists by googleId
+    let user = await User.findOne({ googleId });
+
+    if (!user) {
+      // Check if user exists by email (if they used local auth before)
+      user = await User.findOne({ email });
+      if (user) {
+        // Link google account
+        user.googleId = googleId;
+        // Do not overwrite authProvider if they already have a local password, but we can set it if we want.
+        await user.save();
+      } else {
+        // Create new user
+        let uniqueUsername = username.replace(/\s+/g, '').toLowerCase();
+        let existingUsername = await User.findOne({ username: uniqueUsername });
+        if (existingUsername) {
+          uniqueUsername = `${uniqueUsername}${Math.floor(Math.random() * 10000)}`;
+        }
+
+        user = new User({
+          username: uniqueUsername,
+          email,
+          googleId,
+          authProvider: 'google'
+        });
+        await user.save();
+      }
+    }
+
+    const tokenPayload = { user: { id: user.id, username: user.username } };
+    const token = jwt.sign(tokenPayload, JWT_SECRET, { expiresIn: '7d' });
+
+    res.json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        xp: user.xp,
+        level: user.level,
+        tier: user.tier,
+        badges: user.badges
+      }
+    });
+  } catch (err) {
+    console.error('Google Auth Error:', err);
+    res.status(500).json({ error: 'Google Authentication Failed', details: err.message });
+  }
+});
 
 
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { BACKEND_URL } from '../utils/apiConfig';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
   const { login } = useAuth();
@@ -75,6 +76,26 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         setMessage(data.message + '. You can now login.');
         setMode('login');
       }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    resetState();
+    setLoading(true);
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: credentialResponse.credential }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || data.error);
+      
+      login(data.user, data.token);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -186,6 +207,27 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
             )}
           </button>
         </form>
+
+        {(mode === 'login' || mode === 'signup') && (
+          <div className="mt-6">
+            <div className="relative mb-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-slate-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-slate-950 text-slate-400">Or continue with</span>
+              </div>
+            </div>
+            <div className="flex justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setError('Google Login Failed')}
+                theme="filled_black"
+                shape="pill"
+              />
+            </div>
+          </div>
+        )}
 
         <div className="mt-6 text-center space-y-2">
           {mode === 'login' && (
