@@ -9,7 +9,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
-  const [otp, setOtp] = useState('');
+
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
       setUsername('');
       setEmail('');
       setPassword('');
-      setOtp('');
+
       setNewPassword('');
       setError('');
       setMessage('');

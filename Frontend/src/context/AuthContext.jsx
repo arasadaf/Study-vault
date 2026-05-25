@@ -9,10 +9,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('vault_user');
-    if (storedUser) {
+    if (!storedUser || storedUser === 'undefined') return;
+
+    try {
       setUser(JSON.parse(storedUser));
+    } catch (e) {
+      // If stored value is corrupted (e.g. literal "undefined"), clear it.
+      console.warn('Failed to parse vault_user from localStorage; clearing.', e);
+      localStorage.removeItem('vault_user');
     }
   }, []);
+
 
   const login = (userData, token) => {
     localStorage.setItem('vault_token', token);

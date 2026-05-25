@@ -45,16 +45,6 @@ app.get('/api/health', (req, res) => {
 
 const RoomState = require('./models/RoomState');
 
-// Verify SMTP transporter on startup (helps diagnose email issues)
-const { verifyTransporter } = require('./utils/emailService');
-(async () => {
-  try {
-    const ok = await verifyTransporter();
-    if (!ok) console.warn('SMTP appears misconfigured. OTPs may be printed to console instead of being emailed.');
-  } catch (err) {
-    console.error('Error during SMTP verification:', err && err.message ? err.message : err);
-  }
-})();
 
 // Socket.io for Real-time Collaboration
 io.on('connection', (socket) => {

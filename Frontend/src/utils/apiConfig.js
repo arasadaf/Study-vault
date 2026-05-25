@@ -1,7 +1,10 @@
-// Prefer the build-time env var if provided.
-// Otherwise default to the backend dev server (Backend/index.js default PORT = 5000).
+// Use Vite dev/proxy + relative URLs when no explicit backend URL is set.
+// This avoids mismatches when Vite runs on a different port (5173/5174/5175...).
 const envUrl = import.meta.env.VITE_BACKEND_URL || '';
-const resolvedUrl = envUrl && envUrl.length > 0 ? envUrl : 'https://study-vault-2.onrender.com';
+
+// If provided, use it (e.g. deployed backend). Otherwise, use same-origin via Vite proxy.
+const resolvedUrl = envUrl && envUrl.length > 0 ? envUrl : '';
 
 export const BACKEND_URL = resolvedUrl;
+
 
