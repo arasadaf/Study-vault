@@ -69,12 +69,12 @@ export default function Chat({ socket, roomId, initialMessages = [] }) {
     const currentUsername = user ? user.username : 'Guest';
 
     return (
-      <div className="flex flex-col h-full bg-slate-900/30">
+      <div className="flex flex-col h-full bg-white/30">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((msg, idx) => (
             msg.type === 'system' ? (
               <div key={idx} className="flex justify-center">
-                <span className="text-xs text-slate-500 bg-slate-800/50 px-2 py-1 rounded-full">
+                <span className="text-xs text-slate-600 bg-white/50 px-2 py-1 rounded-full">
                   {msg.message}
                 </span>
               </div>
@@ -83,11 +83,11 @@ export default function Chat({ socket, roomId, initialMessages = [] }) {
                 key={idx} 
                 className={`flex flex-col max-w-[85%] ${msg.username === currentUsername ? 'ml-auto items-end' : 'mr-auto items-start'}`}
               >
-                <span className="text-xs text-slate-400 mb-1 ml-1">{msg.username}</span>
+                <span className="text-xs text-slate-600 mb-1 ml-1">{msg.username}</span>
                 <div className={`px-4 py-2 rounded-2xl ${
                   msg.username === currentUsername 
-                    ? 'bg-indigo-600 text-white rounded-tr-sm' 
-                    : 'bg-slate-800 text-slate-200 border border-slate-700 rounded-tl-sm'
+                    ? 'bg-amber-600 text-white rounded-tr-sm' 
+                    : 'bg-white text-slate-800 border border-slate-900/10 rounded-tl-sm'
                 }`}>
                   <p className="text-sm">{msg.message}</p>
                 </div>
@@ -98,7 +98,7 @@ export default function Chat({ socket, roomId, initialMessages = [] }) {
         </div>
 
       {/* Chat Input */}
-      <div className="p-3 bg-slate-900 border-t border-slate-800">
+      <div className="p-3 bg-white/50 border-t border-slate-900/10">
         <form onSubmit={sendMessage} className="flex gap-2">
           <input
             type="text"
@@ -109,7 +109,7 @@ export default function Chat({ socket, roomId, initialMessages = [] }) {
           />
           <button 
             type="submit" 
-            className="bg-indigo-600 hover:bg-indigo-500 text-white p-2 rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-indigo-500/20"
+            className="bg-amber-600 hover:bg-amber-500 text-white p-2 rounded-lg transition-colors flex items-center justify-center shadow-lg shadow-amber-600/20"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />

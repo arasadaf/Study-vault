@@ -105,9 +105,9 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-      <div className="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl relative animate-fade-in border border-indigo-500/20">
-        <button onClick={onClose} className="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/40 backdrop-blur-sm p-4">
+      <div className="glass-panel w-full max-w-md p-8 rounded-2xl shadow-2xl relative animate-fade-in border border-amber-500/20">
+        <button onClick={onClose} className="absolute top-4 right-4 text-slate-600 hover:text-slate-900 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
@@ -125,7 +125,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
         <form onSubmit={handleAuth} className="space-y-4" autoComplete="off">
           {(mode === 'login' || mode === 'signup') && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Username</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Username</label>
               <input 
                 type="text" 
                 value={username} 
@@ -140,7 +140,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
           {mode === 'signup' && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Email</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
               <input 
                 type="email" 
                 value={email} 
@@ -155,7 +155,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
           {mode === 'reset' && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Email Address</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
               <input 
                 type="email" 
                 value={email} 
@@ -170,7 +170,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
           {(mode === 'login' || mode === 'signup') && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Password</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
               <input 
                 type="password" 
                 value={password} 
@@ -187,7 +187,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
           {mode === 'reset' && (
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">New Password</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">New Password</label>
               <input 
                 type="password" 
                 value={newPassword} 
@@ -212,17 +212,17 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
           <div className="mt-6">
             <div className="relative mb-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-700"></div>
+                <div className="w-full border-t border-slate-300"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-slate-950 text-slate-400">Or continue with</span>
+                <span className="px-2 bg-white text-slate-500">Or continue with</span>
               </div>
             </div>
             <div className="flex justify-center">
               <GoogleLogin
                 onSuccess={handleGoogleSuccess}
                 onError={() => setError('Google Login Failed')}
-                theme="filled_black"
+                theme="outline"
                 shape="pill"
               />
             </div>
@@ -231,14 +231,14 @@ export default function AuthModal({ isOpen, onClose, initialMode = 'login' }) {
 
         <div className="mt-6 text-center space-y-2">
           {mode === 'login' && (
-            <button onClick={() => { setMode('reset'); resetState(); }} className="text-xs text-slate-500 hover:text-indigo-400 block mx-auto">
+            <button onClick={() => { setMode('reset'); resetState(); }} className="text-xs text-slate-500 hover:text-amber-600 block mx-auto">
               Forgot password?
             </button>
           )}
 
-          <p className="text-sm text-slate-400">
+          <p className="text-sm text-slate-600">
             {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
-            <button onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); resetState(); }} className="text-indigo-400 hover:text-indigo-300 font-medium">
+            <button onClick={() => { setMode(mode === 'login' ? 'signup' : 'login'); resetState(); }} className="text-amber-600 hover:text-amber-700 font-medium">
               {mode === 'login' ? 'Sign up here' : 'Login here'}
             </button>
           </p>

@@ -4,7 +4,7 @@ export default function Whiteboard({ socket, roomId, initialDrawings = [] }) {
   const canvasRef = useRef(null);
   const [sessionDrawings, setSessionDrawings] = useState([]);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [color, setColor] = useState('#ffffff');
+  const [color, setColor] = useState('#0f172a');
   const [brushSize, setBrushSize] = useState(3);
   const currentPosition = useRef({ x: 0, y: 0 });
 
@@ -112,7 +112,7 @@ export default function Whiteboard({ socket, roomId, initialDrawings = [] }) {
     // You'd typically emit a clear event here too
   };
 
-  const colors = ['#ffffff', '#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#1e293b'];
+  const colors = ['#0f172a', '#f87171', '#60a5fa', '#34d399', '#fbbf24', '#a78bfa', '#F5F5DC'];
 
   return (
     <div className="flex-1 w-full h-full relative">
@@ -123,13 +123,13 @@ export default function Whiteboard({ socket, roomId, initialDrawings = [] }) {
             <button
               key={c}
               onClick={() => setColor(c)}
-              className={`w-8 h-8 rounded-full border-2 transition-transform ${color === c ? 'border-white scale-110 shadow-lg' : 'border-transparent hover:scale-110'}`}
+              className={`w-8 h-8 rounded-full border-2 transition-transform ${color === c ? 'border-slate-900 scale-110 shadow-lg' : 'border-transparent hover:scale-110'}`}
               style={{ backgroundColor: c }}
-              title={c === '#1e293b' ? 'Eraser' : 'Brush Color'}
+              title={c === '#F5F5DC' ? 'Eraser' : 'Brush Color'}
             />
           ))}
         </div>
-        <div className="w-full h-px bg-slate-700 my-1"></div>
+        <div className="w-full h-px bg-slate-900/10 my-1"></div>
         {/* Brush Size */}
         <input 
           type="range" 
@@ -139,11 +139,11 @@ export default function Whiteboard({ socket, roomId, initialDrawings = [] }) {
           onChange={(e) => setBrushSize(parseInt(e.target.value))}
           className="w-8 -rotate-90 origin-center my-4"
         />
-        <div className="w-full h-px bg-slate-700 my-1"></div>
+        <div className="w-full h-px bg-slate-900/10 my-1"></div>
         {/* Clear Button */}
         <button 
           onClick={clearCanvas}
-          className="p-2 text-slate-400 hover:text-white bg-slate-800 hover:bg-red-500/20 rounded-lg transition-colors"
+          className="p-2 text-slate-600 hover:text-slate-900 bg-white/50 hover:bg-red-500/20 rounded-lg transition-colors"
           title="Clear Board"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">

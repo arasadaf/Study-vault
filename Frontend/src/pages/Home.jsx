@@ -142,16 +142,16 @@ export default function Home() {
         
         {/* Left Column - Hero Text */}
         <div className="space-y-6">
-          <div className="inline-block px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 text-sm font-medium mb-4">
+          <div className="inline-block px-3 py-1 rounded-full border border-amber-600/30 bg-amber-600/10 text-amber-700 text-sm font-medium mb-4">
             ✨ Next Generation Collaborative Study
           </div>
           <h2 className="text-4xl md:text-6xl font-bold leading-tight text-center md:text-left">
             Learn Together, <br className="hidden md:block"/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 to-orange-600">
               Anywhere.
             </span>
           </h2>
-          <p className="text-lg text-slate-400 max-w-lg leading-relaxed text-center md:text-left mx-auto md:mx-0">
+          <p className="text-lg text-slate-600 max-w-lg leading-relaxed text-center md:text-left mx-auto md:mx-0">
             Vault provides a real-time collaborative environment equipped with whiteboards, chat, and shared notes, designed to supercharge your study sessions.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 pt-4 items-center md:items-start justify-center md:justify-start">
@@ -168,13 +168,13 @@ export default function Home() {
         </div>
 
         {/* Right Column - Join Form */}
-        <div className="glass-panel p-8 rounded-2xl md:mt-16 border border-indigo-500/10">
+        <div className="glass-panel p-8 rounded-2xl md:mt-16 border border-amber-500/10">
           <h3 className="text-2xl font-bold mb-2">Join a Study Room</h3>
-          <p className="text-slate-400 mb-6">Enter a room ID to collaborate instantly.</p>
+          <p className="text-slate-600 mb-6">Enter a room ID to collaborate instantly.</p>
           
           <form onSubmit={handleJoin} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1">Room ID</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">Room ID</label>
               <input 
                 type="text" 
                 value={roomId}
@@ -193,8 +193,8 @@ export default function Home() {
           </form>
 
           {!isLoggedIn && (
-            <div className="mt-8 pt-6 border-t border-slate-800">
-              <p className="text-sm text-slate-500 text-center">
+            <div className="mt-8 pt-6 border-t border-slate-900/10">
+              <p className="text-sm text-slate-600 text-center">
                 New to Vault? Create an account to track your study progress.
               </p>
             </div>
@@ -205,11 +205,11 @@ export default function Home() {
 
       {/* Create Room Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in">
-          <div className="glass-panel max-w-md w-full p-8 rounded-2xl shadow-2xl border border-indigo-500/20">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/60 backdrop-blur-sm animate-fade-in">
+          <div className="glass-panel max-w-md w-full p-8 rounded-2xl shadow-2xl border border-amber-500/20">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-2xl font-bold">Create New Room</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-600 hover:text-slate-900">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
@@ -224,7 +224,7 @@ export default function Home() {
             
             <form onSubmit={submitCreateRoom} className="space-y-4" autoComplete="off">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Room Name *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Room Name *</label>
                 <input 
                   type="text" 
                   required
@@ -235,7 +235,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Unique Room ID *</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Unique Room ID *</label>
                 <input 
                   type="text" 
                   required
@@ -246,7 +246,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Password (Optional)</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Password (Optional)</label>
                 <input 
                   type="password" 
                   autoComplete="new-password"
@@ -256,7 +256,7 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1">Description</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
                 <textarea 
                   className="input-field min-h-[80px]"
                   value={newRoomData.description}

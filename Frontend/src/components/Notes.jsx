@@ -32,20 +32,20 @@ export default function Notes({ socket, roomId, initialNotes = '' }) {
   };
 
   return (
-    <div className="flex-1 w-full h-full p-8 flex justify-center bg-slate-900/20">
+    <div className="flex-1 w-full h-full p-8 flex justify-center bg-white/20">
       <div className="w-full max-w-4xl h-full flex flex-col glass-panel rounded-2xl overflow-hidden shadow-2xl">
-        <div className="px-6 py-4 border-b border-white/5 bg-slate-900/50 flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-indigo-400" viewBox="0 0 20 20" fill="currentColor">
+        <div className="px-6 py-4 border-b border-slate-900/10 bg-white/50 flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
             <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
             <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
           </svg>
-          <h3 className="font-semibold text-lg text-slate-200">Shared Notes</h3>
+          <h3 className="font-semibold text-lg text-slate-800">Shared Notes</h3>
         </div>
         <textarea
           value={content}
           onChange={handleChange}
           placeholder="Start typing to collaborate on notes..."
-          className="flex-1 w-full bg-transparent resize-none p-6 outline-none text-slate-100 placeholder:text-slate-600 leading-relaxed font-medium"
+          className="flex-1 w-full bg-transparent resize-none p-6 outline-none text-slate-900 placeholder:text-slate-500 leading-relaxed font-medium"
         />
       </div>
     </div>

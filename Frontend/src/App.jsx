@@ -15,15 +15,15 @@ function AppContent() {
   const isStudyRoom = location.pathname.startsWith('/room/');
 
   return (
-      <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+      <div className="min-h-screen bg-transparent text-slate-900 flex flex-col">
         {/* Navigation Bar */}
-        <nav className="glass-panel sticky top-0 z-50 py-4 px-4 md:px-8 border-b border-white/5">
+        <nav className="glass-panel sticky top-0 z-50 py-4 px-4 md:px-8 border-b border-slate-900/10">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <Link to="/" className="flex items-center gap-2 group" onClick={() => setIsMobileMenuOpen(false)}>
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20 group-hover:scale-110 transition-transform">
                 <span className="font-bold text-white text-xl">V</span>
               </div>
-              <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+              <h1 className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-amber-600 to-orange-600">
                 Vault
               </h1>
             </Link>
@@ -32,17 +32,17 @@ function AppContent() {
             <div className="hidden md:flex gap-6 items-center">
               {user ? (
                 <>
-                  <NavLink to="/" className={({ isActive }) => isActive ? "text-indigo-400 font-bold drop-shadow-[0_0_12px_rgba(99,102,241,0.5)] transition-all" : "text-slate-300 hover:text-white font-medium transition-colors"}>Home</NavLink>
-                  <NavLink to="/my-rooms" className={({ isActive }) => isActive ? "text-indigo-400 font-bold drop-shadow-[0_0_12px_rgba(99,102,241,0.5)] transition-all" : "text-slate-300 hover:text-white font-medium transition-colors"}>My Rooms</NavLink>
-                  <div className="h-4 w-px bg-slate-800"></div>
-                  <Link to="/profile" className="text-slate-300 hover:text-white transition-colors group">
-                    Hello, <span className="font-semibold text-white group-hover:text-indigo-400 transition-colors">{user.username}</span>
+                  <NavLink to="/" className={({ isActive }) => isActive ? "text-amber-600 font-bold drop-shadow-[0_0_12px_rgba(217,119,6,0.3)] transition-all" : "text-slate-600 hover:text-slate-900 font-medium transition-colors"}>Home</NavLink>
+                  <NavLink to="/my-rooms" className={({ isActive }) => isActive ? "text-amber-600 font-bold drop-shadow-[0_0_12px_rgba(217,119,6,0.3)] transition-all" : "text-slate-600 hover:text-slate-900 font-medium transition-colors"}>My Rooms</NavLink>
+                  <div className="h-4 w-px bg-slate-300"></div>
+                  <Link to="/profile" className="text-slate-600 hover:text-slate-900 transition-colors group">
+                    Hello, <span className="font-semibold text-slate-900 group-hover:text-amber-600 transition-colors">{user.username}</span>
                   </Link>
                   <button onClick={logout} className="btn-secondary py-1.5 px-4 text-sm">Logout</button>
                 </>
               ) : (
                 <>
-                  <NavLink to="/" className={({ isActive }) => isActive ? "text-indigo-400 font-bold drop-shadow-[0_0_12px_rgba(99,102,241,0.5)] transition-all" : "text-slate-300 hover:text-white font-medium transition-colors"}>Home</NavLink>
+                  <NavLink to="/" className={({ isActive }) => isActive ? "text-amber-600 font-bold drop-shadow-[0_0_12px_rgba(217,119,6,0.3)] transition-all" : "text-slate-600 hover:text-slate-900 font-medium transition-colors"}>Home</NavLink>
                   <button onClick={openLogin} className="btn-secondary py-1.5 px-6">Login</button>
                   <button onClick={openSignup} className="btn-primary py-1.5 px-6">Sign Up</button>
                 </>
@@ -51,7 +51,7 @@ function AppContent() {
 
             {/* Mobile Menu Button */}
             <button 
-              className="md:hidden p-2 text-slate-400 hover:text-white transition-colors"
+              className="md:hidden p-2 text-slate-600 hover:text-slate-900 transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,30 +66,30 @@ function AppContent() {
 
           {/* Mobile Navigation Dropdown */}
           {isMobileMenuOpen && (
-            <div className="md:hidden absolute top-full left-0 right-0 glass-panel border-t border-white/5 animate-fade-in py-4 px-6 space-y-4">
+            <div className="md:hidden absolute top-full left-0 right-0 glass-panel border-t border-slate-900/10 animate-fade-in py-4 px-6 space-y-4">
               {user ? (
                 <>
-                  <div className="flex items-center gap-3 pb-2 border-b border-white/5">
-                    <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-bold">
+                  <div className="flex items-center gap-3 pb-2 border-b border-slate-900/10">
+                    <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold">
                       {user.username[0].toUpperCase()}
                     </div>
                     <div>
                       <Link to="/profile" onClick={() => setIsMobileMenuOpen(false)}>
-                        <p className="font-bold text-white hover:text-indigo-400 transition-colors">{user.username}</p>
+                        <p className="font-bold text-slate-900 hover:text-amber-600 transition-colors">{user.username}</p>
                       </Link>
-                      <p className="text-xs text-slate-400">Collaborator</p>
+                      <p className="text-xs text-slate-500">Collaborator</p>
                     </div>
                   </div>
                   <NavLink 
                     to="/" 
-                    className={({ isActive }) => `block py-2 transition-colors ${isActive ? "text-indigo-400 font-bold" : "text-slate-300 hover:text-white"}`}
+                    className={({ isActive }) => `block py-2 transition-colors ${isActive ? "text-amber-600 font-bold" : "text-slate-600 hover:text-slate-900"}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Home
                   </NavLink>
                   <NavLink 
                     to="/my-rooms" 
-                    className={({ isActive }) => `block py-2 transition-colors ${isActive ? "text-indigo-400 font-bold" : "text-slate-300 hover:text-white"}`}
+                    className={({ isActive }) => `block py-2 transition-colors ${isActive ? "text-amber-600 font-bold" : "text-slate-600 hover:text-slate-900"}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     My Rooms
@@ -105,7 +105,7 @@ function AppContent() {
                 <div className="flex flex-col gap-3">
                   <NavLink 
                     to="/" 
-                    className={({ isActive }) => `block py-2 transition-colors text-center ${isActive ? "text-indigo-400 font-bold" : "text-slate-300 hover:text-white font-medium"}`}
+                    className={({ isActive }) => `block py-2 transition-colors text-center ${isActive ? "text-amber-600 font-bold" : "text-slate-600 hover:text-slate-900 font-medium"}`}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Home
@@ -121,8 +121,8 @@ function AppContent() {
         {/* Main Content */}
         <main className="flex-1 flex flex-col relative overflow-hidden">
           {/* Background Ambient Glow */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-[128px] -z-10 pointer-events-none"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px] -z-10 pointer-events-none"></div>
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-amber-500/20 rounded-full blur-[128px] -z-10 pointer-events-none"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-[128px] -z-10 pointer-events-none"></div>
           
           <AuthModal 
             isOpen={isAuthModalOpen} 
